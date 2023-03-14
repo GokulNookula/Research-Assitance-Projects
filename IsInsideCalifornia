@@ -1,9 +1,10 @@
 import csv
+import time
 from functools import partial
 from geopy.geocoders import Nominatim
 
 # Initialize the Nominatim geocoder
-geolocator = Nominatim(user_agent="test")
+geolocator = Nominatim(user_agent="ok",timeout= 2)
 
 def isInsideCalifornia(lat, lon):
     # Define the polygon vertices (in the order they appear in my previous answer)
@@ -31,13 +32,13 @@ def isInsideCalifornia(lat, lon):
     return inside
 
 # Load the CSV file with the coordinates
-with open('inputFile.csv', 'r') as csvfile:
+with open('modis_2004_United_States_2.csv', 'r') as csvfile:
     csvreader = csv.reader(csvfile)
 
     # Skip the header row
     next(csvreader)
     
-    with open('outputFile.csv', 'w', newline='') as file:
+    with open('United_States_2004_2.csv', 'w', newline='') as file:
         writer = csv.writer(file)
 
         writer.writerow(["Latitude","Longitude","Brightness","Scan","Track","Acq_Date","Acq_Time","Satellite","Instrument","Confidence","Version","Bright_t31","frp","daynight","givenType","County","Address"])
@@ -64,8 +65,9 @@ with open('inputFile.csv', 'r') as csvfile:
             # Check whether the coordinates are inside California's borders
             if isInsideCalifornia(latitude, longitude):
                 print(f"{latitude}, {longitude}, {brightness}, {scan}, {track}, {acq_date}, {acq_time}, {satellite}, {instrument}, {confidence}, {version}, {bright_t31}, {frp}, {daynight}, {givenType} ")
+                time.sleep(0.5)
                 result = geolocator.reverse(f"{latitude}, {longitude}", addressdetails=True)
-
+            
                 county = result.raw['address'].get('county', '')
                 address = result.address.replace(county, "").strip()
 
