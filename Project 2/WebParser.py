@@ -12,113 +12,88 @@ headers = {
 }
 
 response = requests.get(url,headers=headers)
+print(response)
 
-# To check response time if it is working or not
-# print(response)
+if (response == 200):
 
-# use BeautifulSoup to parse the HTML
-soup = BeautifulSoup(response.content,"html.parser")
+    # use BeautifulSoup to parse the HTML
+    soup = BeautifulSoup(response.content,"html.parser")
 
+    NameOfTheFire = soup.find("h1").text.strip()
+    #Check if it works or not test case use the code below
+    print(NameOfTheFire)
 
-NameOfTheFire = soup.find("h1").text.strip()
-print(NameOfTheFire)
+    county = soup.find('li', string=lambda s: s and 'County:' in s).string.strip().split(':')[-1].strip()
+    #Check if it works or not test case use the code below
+    print(county)
 
-# Find the <li> tag that contains the acres information
-acres = soup.find('li', string=lambda s: s and 'Acres' in s)
+    dateStarted = soup.find('strong', string='Last Updated').find_next('div').text.strip()
+    dateStarted = dateStarted[14:23]
+    #Check if it works or not test case use the code below
+    print(dateStarted) 
 
-# Extract the acres information
-acres_text = acres.string.strip().replace(',', '')
-# Acres_Num contains my Acres that I need
-acres_num = int(acres_text.split()[0])
+    dateContained = soup.find('strong', string='Date Started').find_next('div').text.strip()
+    dateContained = dateContained[16:25]
+    #Check if it works or not test case use the code below
+    print(dateContained)
 
-# Print the acres information
-print(acres_num)
+    # Find the <li> tag that contains the acres information
+    acres = soup.find('li', string=lambda s: s and 'Acres' in s)
 
-county = soup.find('li', string=lambda s: s and 'County:' in s).string.strip().split(':')[-1].strip()
-print(county)
+    # Extract the acres information
+    acres_text = acres.string.strip().replace(',', '')
+    # Acres_Num contains my Acres that I need
+    acres_num = int(acres_text.split()[0])
 
-crew_number = soup.find("div", class_="factoid__label", string="Crews").find_previous_sibling("div", class_="factoid__data").text.strip()
-print(crew_number)
+    # Print the acres information
+    print(acres_num)
 
-# Extract the relevant information
-dateStarted = soup.find('strong', string='Last Updated').find_next('div').text.strip()
-dateStarted = dateStarted[14:23]
-dateContained = soup.find('strong', string='Date Started').find_next('div').text.strip()
-dateContained = dateContained[16:25]
-locationInformation = soup.find('strong', string='Date Contained').find_next('div').text.strip()
-locationInformation = locationInformation[20:]
-latitudeAndLongitude = soup.find('strong', string='Location Information').find_next('div').text.strip()
-latitudeAndLongitude = latitudeAndLongitude[21:]
-latitude, longitude = latitudeAndLongitude[1:-1].split(',')
-cause = soup.find('strong', string='Admin Unit').find_next('div').text.strip()
-cause = cause[6:]
+    latitudeAndLongitude = soup.find('strong', string='Location Information').find_next('div').text.strip()
+    latitudeAndLongitude = latitudeAndLongitude[21:]
+    latitude, longitude = latitudeAndLongitude[1:-1].split(',')
+    #Check if it works or not test case use the code below
+    print(latitude)
+    print(longitude)
 
-# Print the extracted information
-print(dateStarted) 
-print(dateContained)
-print(locationInformation)
-print(latitude)
-print(longitude)
-print(cause)
+    cause = soup.find('strong', string='Admin Unit').find_next('div').text.strip()
+    cause = cause[6:]
+    #Check if it works or not test case use the code below
+    print(cause)
 
-# numStructuresDamaged = soup.find("div", class_="factoid__label", string="Structures Damaged").find_previous_sibling("div", class_="factoid__data").text.strip()
-# print(numStructuresDamaged)
+    locationInformation = soup.find('strong', string='Date Contained').find_next('div').text.strip()
+    locationInformation = locationInformation[20:]
+    #Check if it works or not test case use the code below
+    print(locationInformation)
 
+    county = soup.find('li', string=lambda s: s and 'County:' in s).string.strip().split(':')[-1].strip()
+    #Check if it works or not test case use the code below
+    print(county)
 
-# numStructuresDestroyed = soup.find("div", class_="factoid__label", string="Structures Destroyed").find_previous_sibling("div", class_="factoid__data").text.strip()
-# print(numStructuresDestroyed)
+    try:
+        numStructuresDamaged = soup.find("div", class_="factoid__label", string="Structures Damaged").find_previous_sibling("div", class_="factoid__data").text.strip()
+    except AttributeError:
+        numStructuresDamaged = None
 
-# fatality = soup.find("div", class_="factoid__label", string="Fatality").find_previous_sibling("div", class_="factoid__data").text.strip()
-# print(fatality)
+    try:
+        numStructuresDestroyed = soup.find("div", class_="factoid__label", string="Structures Destroyed").find_previous_sibling("div", class_="factoid__data").text.strip()
+    except AttributeError:
+        numStructuresDestroyed = None
 
-# injuries = soup.find("div", class_="factoid__label", string="Injuries").find_previous_sibling("div", class_="factoid__data").text.strip()
-# print(injuries)
+    try:
+        fatality = soup.find("div", class_="factoid__label", string="Fatality").find_previous_sibling("div", class_="factoid__data").text.strip()
+    except AttributeError:
+        fatality = None
 
-try:
-    numStructuresDamaged = soup.find("div", class_="factoid__label", string="Structures Damaged").find_previous_sibling("div", class_="factoid__data").text.strip()
-except AttributeError:
-    numStructuresDamaged = None
+    try:
+        injuries = soup.find("div", class_="factoid__label", string="Injuries").find_previous_sibling("div", class_="factoid__data").text.strip()
+    except AttributeError:
+        injuries = None
 
-try:
-    numStructuresDestroyed = soup.find("div", class_="factoid__label", string="Structures Destroyed").find_previous_sibling("div", class_="factoid__data").text.strip()
-except AttributeError:
-    numStructuresDestroyed = None
-
-try:
-    fatality = soup.find("div", class_="factoid__label", string="Fatality").find_previous_sibling("div", class_="factoid__data").text.strip()
-except AttributeError:
-    fatality = None
-
-try:
-    injuries = soup.find("div", class_="factoid__label", string="Injuries").find_previous_sibling("div", class_="factoid__data").text.strip()
-except AttributeError:
-    injuries = None
-
-print(numStructuresDamaged)
-print(numStructuresDestroyed)
-print(fatality)
-print(injuries)
+    #Check if it works or not test case use the code below
+    print(numStructuresDamaged)
+    print(numStructuresDestroyed)
+    print(fatality)
+    print(injuries)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# "Name of the Fire","County / Counties", "Date Started","Date Contained", "Acres", "Latitude", "Longitude", "Cause", "Location Information", "Crews (Number of Fire Fighter Crews)",
-# "Number of Structures Damaged", "Number of Structures Destroyed", "Fatality, Injuries"
 
