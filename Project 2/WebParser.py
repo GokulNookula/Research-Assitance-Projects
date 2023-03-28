@@ -3,7 +3,7 @@ import requests
 import csv
 
 #Insert the Url Link where you want to extract the stuff from
-url = "https://www.fire.ca.gov/incidents/2022/2/16/airport-fire"
+url = "#insert url here"
 
 #Change the reference page when your trying to access different years from the above website or you will get Forbidden Acess aka <Response [403]
 headers = {
