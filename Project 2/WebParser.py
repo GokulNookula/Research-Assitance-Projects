@@ -70,11 +70,18 @@ if (response.status_code == 200):
     except AttributeError:
         cause = None
 
-    locationInformation = soup.find('strong', string='Date Contained').find_next('div').text.strip()
-    locationInformation = locationInformation[20:]
-    locationInformation = f"'{locationInformation}'"
-    #Check if it works or not test case use the code below
-    # print(locationInformation)
+    if ():
+        locationInformation = soup.find('strong', string='Date Contained').find_next('div').text.strip()
+        locationInformation = locationInformation[20:]
+        locationInformation = f"'{locationInformation}'"
+        #Check if it works or not test case use the code below
+        # print(locationInformation)
+    else:
+        locationInformation = soup.find('strong', string='Date Started').find_next('div').text.strip()
+        locationInformation = locationInformation[20:]
+        locationInformation = f"'{locationInformation}'"
+        #Check if it works or not test case use the code below
+        # print(locationInformation)
 
     try:
         crewNumber = soup.find("div", class_="factoid__label", string="Crews").find_previous_sibling("div", class_="factoid__data").text.strip()
