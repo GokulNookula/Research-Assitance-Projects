@@ -70,13 +70,13 @@ if (response.status_code == 200):
     except AttributeError:
         cause = None
 
-    if ():
+    try:
         locationInformation = soup.find('strong', string='Date Contained').find_next('div').text.strip()
         locationInformation = locationInformation[20:]
         locationInformation = f"'{locationInformation}'"
         #Check if it works or not test case use the code below
         # print(locationInformation)
-    else:
+    except AttributeError:
         locationInformation = soup.find('strong', string='Date Started').find_next('div').text.strip()
         locationInformation = locationInformation[20:]
         locationInformation = f"'{locationInformation}'"
