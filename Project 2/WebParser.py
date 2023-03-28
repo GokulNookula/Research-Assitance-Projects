@@ -127,7 +127,11 @@ with open('test.csv', 'w', newline='') as file:
             # print(numStructuresDestroyed)
             # print(fatality)
             # print(injuries)
-
+            
+            print([NameOfTheFire,county,dateStarted,dateContained,acres_num,
+                            latitude,longitude,cause,locationInformation,crewNumber,numStructuresDamaged
+                            ,numStructuresDestroyed,fatality,injuries])
+           
             writer.writerow([NameOfTheFire,county,dateStarted,dateContained,acres_num,
                             latitude,longitude,cause,locationInformation,crewNumber,numStructuresDamaged
                             ,numStructuresDestroyed,fatality,injuries])
