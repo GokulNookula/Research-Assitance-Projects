@@ -18,7 +18,7 @@ with open('test.csv', 'w', newline='') as file:
                     , "Acres", "Latitude", "Longitude", "Cause", "Location Information", "Crews (Number of Fire Fighter Crews)"
                     ,"Number of Structures Damaged", "Number of Structures Destroyed", "Fatality", "Injuries"])
 
-    for url in urls:
+     for url in urls:
 
         response = requests.get(url,headers=headers)
         #To check if we can access the website or not
@@ -33,9 +33,14 @@ with open('test.csv', 'w', newline='') as file:
             #Check if it works or not test case use the code below
             # print(NameOfTheFire)
 
-            county = soup.find('li', string=lambda s: s and 'County:' in s).string.strip().split(':')[-1].strip()
-            #Check if it works or not test case use the code below
-            # print(county)
+            try:
+                county = soup.find('li', string=lambda s: s and 'County:' in s).string.strip().split(':')[-1].strip()
+                #Check if it works or not test case use the code below
+                # print(county)
+            except AttributeError:
+                counties_element = soup.find('li', string=lambda s: s and 'Counties:' in s)
+                county_list = [county.strip() for county in counties_element.string.split(':')[1].split(',')]
+                county = ", ".join(county_list)
 
             dateStarted = soup.find('strong', string='Last Updated').find_next('div').text.strip()
             dateStarted = dateStarted[13:23]
@@ -127,11 +132,11 @@ with open('test.csv', 'w', newline='') as file:
             # print(numStructuresDestroyed)
             # print(fatality)
             # print(injuries)
-            
+
             print([NameOfTheFire,county,dateStarted,dateContained,acres_num,
                             latitude,longitude,cause,locationInformation,crewNumber,numStructuresDamaged
                             ,numStructuresDestroyed,fatality,injuries])
-           
+
             writer.writerow([NameOfTheFire,county,dateStarted,dateContained,acres_num,
                             latitude,longitude,cause,locationInformation,crewNumber,numStructuresDamaged
                             ,numStructuresDestroyed,fatality,injuries])
