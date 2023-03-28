@@ -29,14 +29,17 @@ if (response.status_code == 200):
     # print(county)
 
     dateStarted = soup.find('strong', string='Last Updated').find_next('div').text.strip()
-    dateStarted = dateStarted[14:23]
+    dateStarted = dateStarted[13:23]
     #Check if it works or not test case use the code below
     # print(dateStarted) 
 
     dateContained = soup.find('strong', string='Date Started').find_next('div').text.strip()
-    dateContained = dateContained[16:25]
-    #Check if it works or not test case use the code below
-    # print(dateContained)
+    if "Date Contained" in dateContained:
+        dateContained = dateContained[16:25]
+        #Check if it works or not test case use the code below
+        # print(dateContained)
+    else:
+        dateContained = None
 
     try:
         # Find the <li> tag that contains the acres information
