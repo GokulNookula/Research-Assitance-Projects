@@ -33,14 +33,15 @@ with open('test.csv', 'w', newline='') as file:
             #Check if it works or not test case use the code below
             # print(NameOfTheFire)
 
-            try:
-                county = soup.find('li', string=lambda s: s and 'County:' in s).string.strip().split(':')[-1].strip()
-                #Check if it works or not test case use the code below
-                # print(county)
-            except AttributeError:
-                counties_element = soup.find('li', string=lambda s: s and 'Counties:' in s)
-                county_list = [county.strip() for county in counties_element.string.split(':')[1].split(',')]
-                county = ", ".join(county_list)
+            county_element = soup.find('li', string=lambda s: s and ('County:' in s or 'Counties:' in s))
+            if county_element is not None:
+                if 'County:' in county_element.string:
+                    county = county_element.string.strip().split(':')[-1].strip()
+                elif 'Counties:' in county_element.string:
+                    county_list = [county.strip() for county in county_element.string.split(':')[1].split(',')]
+                    county = ", ".join(county_list)
+            else:
+                county = None
 
             dateStarted = soup.find('strong', string='Last Updated').find_next('div').text.strip()
             dateStarted = dateStarted[13:23]
@@ -69,12 +70,16 @@ with open('test.csv', 'w', newline='') as file:
             except AttributeError:
                 acres_num = None
 
-            latitudeAndLongitude = soup.find('strong', string='Location Information').find_next('div').text.strip()
-            latitudeAndLongitude = latitudeAndLongitude[21:]
-            latitude, longitude = latitudeAndLongitude[1:-1].split(',')
-            #Check if it works or not test case use the code below
-            # print(latitude)
-            # print(longitude)
+            try:
+                latitudeAndLongitude = soup.find('strong', string='Location Information').find_next('div').text.strip()
+                latitudeAndLongitude = latitudeAndLongitude[21:]
+                latitude, longitude = latitudeAndLongitude[1:-1].split(',')
+                #Check if it works or not test case use the code below
+                # print(latitude)
+                # print(longitude)
+            except ValueError:
+                latitudeAndLongitude = None
+                latitude, longitude = None, None
 
             try:
                 cause = soup.find('strong', string='Admin Unit').find_next('div').text.strip()
